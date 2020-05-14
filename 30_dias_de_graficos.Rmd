@@ -5,7 +5,7 @@ date: "12/5/2020"
 output: html_document
 ---
 
-## _30 días de gráficos con R_
+# _30 días de gráficos con R_
 
 Únete a este desafío de la comunidad hispanoablante de R y participa en #30díasdegráficos, una iniciativa para compartir y aprender sobre visualización de datos usando R.
 
@@ -13,22 +13,31 @@ El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera c
 
 
 ```{r gráfico de barras o columnas, echo=FALSE}
-
 # Cargar los paquetes requeridos
 library(stringr)
 library(tidyverse)
+```
+## _Desafío Día 1: Gráfico de barras o columnas_
 
+Para este desafío utilicé la base de datos de la WNBA proporcionada para la carrera de Analista de Datos en R de [Dataquest](https://www.dataquest.io/path/data-analyst-r/). Para más información sobre la WNBA [visitar](https://www.wnba.com/stats/player-stats/)
+
+```{r gráfico de barras o columnas, echo=FALSE}
 # Importar la base de datos
 wnba <- read.csv("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/wnba.csv")
+
+# Renombrando los niveles y etiquetas de las variables
+wnba$Pos <- factor(wnba$Pos,levels = c("G", "F", "C", "G/F", "F/C"),
+                   labels = c("Guard", "Forward", "Center", "Guard/Forward", "Forward/Center")) 
 
 ggplot(data = wnba,
        aes(x = Pos, fill = Pos)) +
   geom_bar() + 
   coord_flip() + 
+  theme_classic() +
   theme(legend.position = "none") +
   labs(x=NULL, y=NULL, fill=NULL,
-         title="Posiciones de las jugadoras") +
-  theme_minimal() 
+         title="Posiciones de las jugadoras") 
+  
 
 pos_prop <- wnba %>% 
   group_by(Pos) %>% 
@@ -38,34 +47,44 @@ ggplot(data = pos_prop,
               aes(x = "", y = Prop, fill = Pos)) + 
   geom_bar(stat = "identity", width = 0.25) +
   coord_flip() +
+  theme_classic() +
   geom_text(aes(label = str_c(round(Prop * 100), "%")), 
             position = position_stack(vjust = 0.5)) + 
-  labs(x = NULL, 
-       y = NULL, 
-       fill = NULL, 
-       title = "Distribución de jugadoras según su posición") + 
-  theme_classic() + 
   theme(axis.line = element_blank(),
           axis.text = element_blank(),
           axis.ticks = element_blank()) +
-  scale_color_hue(labels = c("", "T888"))
+  labs(x = NULL, 
+       y = NULL, 
+       fill = NULL, 
+       title = "Distribución de jugadoras según su posición") 
+   
+```
+## _Desafío Día 2: Gráfico de líneas_
+
+Para este desafío utilicé la base de datos de [Gapminder](https://www.gapminder.org/data/) sobre expectativa de vida. Estados Partes
+
+```{r}
+# Importar la base de datos
+download.file("https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv", 'data/gapminder-FiveYearData.csv')
+gapminder <- read.csv("data/gapminder-FiveYearData.csv", header=TRUE)
+```
 
 
+```{r}
+# filter(continent == "mercosur")
+mercosur <- gapminder %>% 
+  filter(country == "Argentina" | country == "Brazil" | country == "Paraguay" | country == "Uruguay") 
 
-exp_prop <- wnba %>%
-    group_by(Exp_ordinal) %>%
-    summarize(Prop = n()/nrow(wnba)) 
-
-ggplot(data=exp_prop, aes(x="", y=Prop, fill=Exp_ordinal))+
-    geom_bar(stat="identity", width=0.25)+
-    coord_flip()+
-    geom_text(aes(label=str_c(round(Prop * 100), "%")),
-              position = position_stack(vjust=0.5))+
-    labs(x=NULL, y=NULL, fill=NULL,
-         title="Distribución de jugadoras por nivel de experiencia")+
-    theme_classic()+
-    theme(axis.line=element_blank(), 
-          axis.text=element_blank(),
-          axis.ticks=element_blank())
+mercosur$country <- factor(mercosur$country,levels = c("Argentina", "Brazil", "Paraguay", "Uruguay"),
+                   labels = c("Argentina", "Brasil", "Paraguay", "Uruguay")) 
+  
+ggplot(data = mercosur, aes(x = year, y = lifeExp, color = country)) +
+  geom_line() + 
+  geom_point() +
+  theme_minimal() +
+  labs(x = NULL, 
+       y = NULL, 
+       fill = NULL, 
+       title = "Evolución de la expectativa de vida en los Estados Partes del Mercosur") 
 ```
 

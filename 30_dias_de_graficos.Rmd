@@ -14,7 +14,6 @@ El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera c
 
 ```{r gráfico de barras o columnas, echo=FALSE}
 # Cargar los paquetes requeridos
-library(stringr)
 library(tidyverse)
 ```
 ## _Desafío Día 1: Gráfico de barras o columnas_
@@ -38,7 +37,6 @@ ggplot(data = wnba,
   labs(x=NULL, y=NULL, fill=NULL,
          title="Posiciones de las jugadoras") 
   
-
 pos_prop <- wnba %>% 
   group_by(Pos) %>% 
   summarize(Prop = n() / nrow(wnba))
@@ -61,16 +59,21 @@ ggplot(data = pos_prop,
 ```
 ## _Desafío Día 2: Gráfico de líneas_
 
-Para este desafío utilicé la base de datos de [Gapminder](https://www.gapminder.org/data/) sobre expectativa de vida. Estados Partes
+Para este desafío utilicé datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.
+
+Para cada uno de los 142 países, El paquete proporciona información sobre la expectativa de vida, el PIB per cápita y la población, generados cada cinco años, de 1952 a 2007.
+
+
+El gráfico de líneas será sobre la evolución de la expectativa de vida de los Estados Partes del Mercosur.
 
 ```{r}
-# Importar la base de datos
-download.file("https://raw.githubusercontent.com/resbaz/r-novice-gapminder-files/master/data/gapminder-FiveYearData.csv", 'data/gapminder-FiveYearData.csv')
-gapminder <- read.csv("data/gapminder-FiveYearData.csv", header=TRUE)
+# Importar la base de datos Gapminder
+library(gapminder)
 ```
 
 
 ```{r}
+
 # filter(continent == "mercosur")
 mercosur <- gapminder %>% 
   filter(country == "Argentina" | country == "Brazil" | country == "Paraguay" | country == "Uruguay") 
@@ -86,5 +89,36 @@ ggplot(data = mercosur, aes(x = year, y = lifeExp, color = country)) +
        y = NULL, 
        fill = NULL, 
        title = "Evolución de la expectativa de vida en los Estados Partes del Mercosur") 
+```
+
+## _Desafío Día 3: Gráfico de puntos o burbujas_
+
+Para este desafío utilicé nuevamente la base de datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.
+
+El gráfico de burbujas representará la relación entre la expectativa de vida y el GDP por cápita.
+
+```{r}
+# Importar la base de datos Gapminder
+# library(gapminder)
+```
+
+```{r}
+data <- gapminder %>% 
+  filter(year=="2007") %>% 
+  select(-year) %>% 
+  arrange(desc(pop)) %>%
+  mutate(country = factor(country, country), 
+         Continente = continent) 
+  
+ data$Continente <- factor(data$Continente,levels = c("Africa", "Americas", "Asia", "Europe", "Oceania"),
+                    labels = c("África", "Américas", "Asia ", "Europa", "Oceanía"))
+
+ggplot(data, aes(x = gdpPercap, y = lifeExp, size = pop, color = Continente)) +
+  geom_point(alpha = 0.5) +
+  scale_size(range = c(.1, 24), name = "Población (M)") +
+  labs(x = "Gdp per Capita", 
+       y = "Expectativa de vida", 
+       title = "Expectativa de vida y GDP per capita según continente y población") +
+  theme_bw()
 ```
 

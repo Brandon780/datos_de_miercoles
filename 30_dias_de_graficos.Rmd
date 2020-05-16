@@ -151,5 +151,3 @@ ggplot(mercosur, aes(x = year, y = lifeExp, color = country)) +
 
 ```
 
-
-```{r}

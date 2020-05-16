@@ -1,0 +1,53 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "16/5/2020"
+output: html_document
+---
+# _30 días de gráficos con R_
+
+Únete a este desafío de la comunidad hispanoablante de R y participa en #30díasdegráficos, una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+## _Desafío Día 5: Diagramas de arco_
+
+Esta es la primera vez que hago un diagrama de arco. Decidí realizarlo con los datos de las comunidades de R a las que pertenezco. 
+
+Utilicé el paquete creado por [Gaston Sanchez](https://github.com/gastonstat/arcdiagram) y me basé en sus [especificaciones](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.707.6275&rep=rep1&type=pdf)
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+# load devtools
+library(devtools)
+
+# install 'arcdiagram'
+install_github('gastonstat/arcdiagram')
+
+library(arcdiagram)
+library(igraph)
+```
+
+
+```{r}
+
+lab = rbind(c("Maggie", "R-Ladies \n Montevideo"), c("Maggie", "GURU::mvd"), c("Maggie", "R-Ladies \n Buenos Aires"),c("Maggie", "R en \n Buenos Aires"), c("Maggie", "R-Ladies \n Gainesville"), c("Maggie", "R-Ladies Mid-Mo"), c("Maggie", "Greater Boston \n useR Group"), c("Maggie", "R-Ladies \n Riverside"), c("Maggie", "R-Ladies \n Santa Barbara"), c("Maggie", "R-Ladies Philly"), c("Maggie", "R-Ladies \n Washington D.C."), c("Maggie", "Salt Lake City \n R Users Group"), c("Maggie", "R-Ladies \n Cape Town"), c("Maggie", "R-Ladies Global"), c("R-Ladies \n Montevideo", "GURU::mvd"), c("R-Ladies \n Buenos Aires", "R en \n Buenos Aires"), c("R-Ladies Global", "R-Ladies \n Montevideo"), c("R-Ladies Global", "R-Ladies \n Buenos Aires"), c("R-Ladies Global", "R-Ladies \n Gainesville"), c("R-Ladies Global", "R-Ladies Mid-Mo"), c("R-Ladies Global", "R-Ladies \n Riverside"), c("R-Ladies Global", "R-Ladies \n Santa Barbara"), c("R-Ladies Global", "R-Ladies Philly"), c("R-Ladies Global", "R-Ladies \n Washington D.C."), c("R-Ladies Global", "R-Ladies \n Cape Town"))
+
+arcplot(lab, 
+        col.nodes="mediumorchid4", # color de los nodos
+        col.arcs = "plum", # color de los arcos
+        lwd.arcs = 1.5, # grosor de los arcos
+        col.labels = "lavenderblush4", # color texto ejes
+        cex.labels = 0.8, # tamaño texto ejes
+        las = 2) # posición texto ejes perpendicular
+
+title(main = "Comunidades de R-Ladies y usuarios de R en las que participo", 
+      font.main = 2, col.main = "thistle4",
+      cex.sub = 0.75, font.sub = 3, col.sub = "thistle")
+ 
+
+```
+

@@ -1,0 +1,66 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "17/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+## _Desafío Día 6: gráficos de dona_
+
+Para este desafío me basé en los ejemplos de [Datanovia](https://www.datanovia.com/en/blog/how-to-create-a-pie-chart-in-r-using-ggplot2/) utilizando los datos del 
+Titanic {datasets} y en el paquete [ggpubr](https://cran.r-project.org/web/packages/ggpubr/index.html) creado por [Alboukadel Kassambara](https://rdrr.io/cran/ggpubr/man/ggdonutchart.html).
+
+Realicé las 2 versiones de la misma dataset, en primer lugar utilizando ggplot() + coord_polar () y luego con ggdonutchart().
+
+```{r gráfico de dona}
+library(tidyverse)
+```
+
+```{r}
+# Crear los datos de los pasajeros y tripulación
+titanic <- data.frame(clase = c("Primera", "Seguda", "Tercera", "Tripulación"),
+                      n = c(325, 285, 706, 885),
+                      prop = c(14.8, 12.9, 32.1, 40.2))
+titanic
+```
+
+```{r}
+titanic <- titanic %>%
+  arrange(desc(clase)) %>%
+  mutate(lab.ypos = cumsum(prop) - 0.5 * prop)
+
+palette <- c("#72ecee", "#45a4b8", "#06547a", "#3e8b7e")
+
+ggplot(titanic, aes(x = 2, y = prop, fill = clase)) +
+  geom_bar(stat = "identity", color = "white") +
+  coord_polar(theta = "y", start = 0) +
+  geom_text(aes(y = lab.ypos, label = prop), color = "white", fontface = "bold")+
+  scale_fill_manual(values = palette) +
+  theme_void() +
+  xlim(0.5, 2.5) + # genera el efecto dona
+  labs(title = "Pasajeros y tripulantes del Titanic",
+       caption = "@G33kyCats") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
+        plot.caption = element_text(face = "italic", size = 11))
+
+```
+
+
+
+```{r}
+# Cargar ggpubr para hacer gráficos de donas
+# install.packages("ggpubr")
+library(ggpubr)
+
+ ggdonutchart(titanic, "prop", 
+              fill = "clase", color = "white",
+              palette = c("#72ecee", "#45a4b8", "#06547a", "#3e8b7e"),
+              lab.pos = "in", lab.font = "white")
+
+```

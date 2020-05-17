@@ -16,7 +16,7 @@ Esta es la primera vez que hago un diagrama de arco. Decidí realizarlo con los 
 
 Utilicé el paquete creado por [Gaston Sanchez](https://github.com/gastonstat/arcdiagram) y me basé en sus [especificaciones](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.707.6275&rep=rep1&type=pdf)
 
-```{r}
+```{r diagrama de arco}
 library(tidyverse)
 ```
 
@@ -30,7 +30,6 @@ install_github('gastonstat/arcdiagram')
 library(arcdiagram)
 library(igraph)
 ```
-
 
 ```{r}
 
@@ -47,7 +46,4 @@ arcplot(lab,
 title(main = "Comunidades de R-Ladies y usuarios de R en las que participo", 
       font.main = 2, col.main = "thistle4",
       cex.sub = 0.75, font.sub = 3, col.sub = "thistle")
- 
-
-```
-
+ ```

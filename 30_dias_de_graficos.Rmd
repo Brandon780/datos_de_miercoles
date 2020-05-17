@@ -7,12 +7,11 @@ output: html_document
 
 # _30 días de gráficos con R_
 
-Únete a este desafío de la comunidad hispanoablante de R y participa en #30díasdegráficos, una iniciativa para compartir y aprender sobre visualización de datos usando R.
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
 
 El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
 
-
-```{r gráfico de barras o columnas, echo=FALSE}
+```{r}
 # Cargar los paquetes requeridos
 library(tidyverse)
 ```
@@ -22,7 +21,7 @@ Para este desafío utilicé la base de datos de la WNBA proporcionada para la ca
 
 Realicé un gráfico de barras que compara las frecuencias de las jugadoras en las distintas posiciones. 
 
-```{r gráfico de barras o columnas, echo=FALSE}
+```{r gráfico de barras o columnas}
 # Importar la base de datos
 wnba <- read.csv("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/wnba.csv")
 
@@ -68,13 +67,12 @@ Para cada uno de los 142 países, El paquete proporciona información sobre la e
 
 Realicé el gráfico de líneas sobre la evolución de la expectativa de vida de los Estados Partes del Mercosur.
 
-```{r}
+```{r gráfico de líneas}
 # Importar la base de datos Gapminder
 library(gapminder)
 ```
 
 ```{r}
-
 mercosur <- gapminder %>% 
   filter(country == "Argentina" | country == "Brazil" | country == "Paraguay" | country == "Uruguay") 
 
@@ -97,7 +95,8 @@ Para este desafío utilicé nuevamente la base de datos de [Gapminder](https://w
 
 El gráfico de burbujas representa la relación entre la expectativa de vida y el GDP por cápita, de acuerdo al continente y población.
 
-```{r}
+```{r gráfico de burbujas}
+
 # Importar la base de datos Gapminder
 # library(gapminder)
 ```
@@ -128,7 +127,7 @@ Para este desafío utilicé nuevamente la base de datos de [Gapminder](https://w
 
 El gráfico de facetas representa sobre la evolución de la expectativa de vida de los Estados Partes del Mercosur.
 
-```{r}
+```{r gráfico con facetas}
 # Importar la base de datos Gapminder
 # library(gapminder)
 ```
@@ -150,4 +149,93 @@ ggplot(mercosur, aes(x = year, y = lifeExp, color = country)) +
   facet_wrap(~ country)
 
 ```
+## _Desafío Día 5: Diagramas de arco_
+
+Esta es la primera vez que hago un diagrama de arco. Decidí realizarlo con los datos de las comunidades de R a las que pertenezco. 
+
+Utilicé el paquete creado por [Gaston Sanchez](https://github.com/gastonstat/arcdiagram) y me basé en sus [especificaciones](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.707.6275&rep=rep1&type=pdf)
+
+```{r diagrama de arco}
+library(tidyverse)
+```
+
+```{r}
+# load devtools
+library(devtools)
+
+# install 'arcdiagram'
+install_github('gastonstat/arcdiagram')
+
+library(arcdiagram)
+library(igraph)
+```
+
+```{r}
+lab = rbind(c("Maggie", "R-Ladies \n Montevideo"), c("Maggie", "GURU::mvd"), c("Maggie", "R-Ladies \n Buenos Aires"),c("Maggie", "R en \n Buenos Aires"), c("Maggie", "R-Ladies \n Gainesville"), c("Maggie", "R-Ladies Mid-Mo"), c("Maggie", "Greater Boston \n useR Group"), c("Maggie", "R-Ladies \n Riverside"), c("Maggie", "R-Ladies \n Santa Barbara"), c("Maggie", "R-Ladies Philly"), c("Maggie", "R-Ladies \n Washington D.C."), c("Maggie", "Salt Lake City \n R Users Group"), c("Maggie", "R-Ladies \n Cape Town"), c("Maggie", "R-Ladies Global"), c("R-Ladies \n Montevideo", "GURU::mvd"), c("R-Ladies \n Buenos Aires", "R en \n Buenos Aires"), c("R-Ladies Global", "R-Ladies \n Montevideo"), c("R-Ladies Global", "R-Ladies \n Buenos Aires"), c("R-Ladies Global", "R-Ladies \n Gainesville"), c("R-Ladies Global", "R-Ladies Mid-Mo"), c("R-Ladies Global", "R-Ladies \n Riverside"), c("R-Ladies Global", "R-Ladies \n Santa Barbara"), c("R-Ladies Global", "R-Ladies Philly"), c("R-Ladies Global", "R-Ladies \n Washington D.C."), c("R-Ladies Global", "R-Ladies \n Cape Town"))
+
+arcplot(lab, 
+        col.nodes="mediumorchid4", # color de los nodos
+        col.arcs = "plum", # color de los arcos
+        lwd.arcs = 1.5, # grosor de los arcos
+        col.labels = "lavenderblush4", # color texto ejes
+        cex.labels = 0.8, # tamaño texto ejes
+        las = 2) # posición texto ejes perpendicular
+
+title(main = "Comunidades de R-Ladies y usuarios de R en las que participo", 
+      font.main = 2, col.main = "thistle4",
+      cex.sub = 0.75, font.sub = 3, col.sub = "thistle")
+```
+ 
+## _Desafío Día 6: gráficos de dona_
+
+Para este desafío me basé en los ejemplos de [Datanovia](https://www.datanovia.com/en/blog/how-to-create-a-pie-chart-in-r-using-ggplot2/) utilizando los datos del 
+Titanic {datasets} y en el paquete [ggpubr](https://cran.r-project.org/web/packages/ggpubr/index.html) creado por [Alboukadel Kassambara](https://rdrr.io/cran/ggpubr/man/ggdonutchart.html).
+
+Realicé las 2 versiones de la misma dataset, en primer lugar utilizando ggplot() + coord_polar () y luego con ggdonutchart().
+
+```{r gráfico de dona}
+library(tidyverse)
+```
+
+```{r}
+# Crear los datos de los pasajeros y tripulación
+titanic <- data.frame(clase = c("Primera", "Seguda", "Tercera", "Tripulación"),
+                      n = c(325, 285, 706, 885),
+                      prop = c(14.8, 12.9, 32.1, 40.2))
+titanic
+```
+
+```{r}
+titanic <- titanic %>%
+  arrange(desc(clase)) %>%
+  mutate(lab.ypos = cumsum(prop) - 0.5 * prop)
+
+palette <- c("#72ecee", "#45a4b8", "#06547a", "#3e8b7e")
+
+ggplot(titanic, aes(x = 2, y = prop, fill = clase)) +
+  geom_bar(stat = "identity", color = "white") +
+  coord_polar(theta = "y", start = 0) +
+  geom_text(aes(y = lab.ypos, label = prop), color = "white", fontface = "bold")+
+  scale_fill_manual(values = palette) +
+  theme_void() +
+  xlim(0.5, 2.5) + # genera el efecto dona
+  labs(title = "Pasajeros y tripulantes del Titanic",
+       caption = "@G33kyCats") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
+        plot.caption = element_text(face = "italic", size = 11))
+
+```
+
+```{r}
+# Cargar ggpubr para hacer gráficos de donas
+# install.packages("ggpubr")
+library(ggpubr)
+
+ ggdonutchart(titanic, "prop", 
+              fill = "clase", color = "white",
+              palette = c("#72ecee", "#45a4b8", "#06547a", "#3e8b7e"),
+              lab.pos = "in", lab.font = "white")
+
+```
+
 

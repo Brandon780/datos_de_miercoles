@@ -229,7 +229,7 @@ ggplot(titanic, aes(x = 2, y = prop, fill = clase)) +
 ```{r}
 # Cargar ggpubr para hacer gráficos de donas
 # install.packages("ggpubr")
-library(ggpubr)
+# library(ggpubr)
 
  ggdonutchart(titanic, "prop", 
               fill = "clase", color = "white",
@@ -239,3 +239,36 @@ library(ggpubr)
 ```
 
 
+## _Desafío Día 7: Gráficos ridgeline_
+
+Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table). Seguí el ejemplo de gráfico ridgeline de [Datanovia](https://www.datanovia.com/en/blog/elegant-visualization-of-density-distribution-in-r-using-ridgeline/).
+
+```{r gráficos ridgeline}
+library(tidyverse)
+library(readxl)
+library(ggridges)
+library(viridisLite)
+library(viridis)
+library(extrafontdb)
+library(hrbrthemes)
+```
+
+```{r}
+# Importar la base de datos
+pde <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/temperatura_pde.xlsx")
+
+pde$Mes <- factor(pde$Mes,levels = c("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "setiembre", "octubre", "noviembre", "diciembre"),
+                   labels = c("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "setiembre", "octubre", "noviembre", "diciembre"))
+
+ggplot(pde, aes(x = `Temperatura max (°C)`, y = `Mes`, fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_fill_viridis(name = "Temp. [F]", option = "C") +
+  labs(title = "Temperaturas promedio en Punta del Este 1992-2012",
+       caption = "@G33kyCats") +
+  theme_ridges() +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8),
+      plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
+      plot.caption = element_text(face = "italic", size = 11)) 

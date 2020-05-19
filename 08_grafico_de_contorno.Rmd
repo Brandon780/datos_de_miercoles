@@ -1,0 +1,52 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "12/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+```{r}
+# Cargar los paquetes requeridos
+library(tidyverse)
+```
+## _Desafío Día 8: Gráfico de contorno_
+
+Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table). Seguí el ejemplo de .
+
+```{r gráficos ridgeline}
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+# Importar la base de datos
+pde <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/temperatura_pde.xlsx")
+
+pde$Mes <- factor(pde$Mes,levels = c("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "setiembre", "octubre", "noviembre", "diciembre"),
+                   labels = c("ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "set", "oct", "nov", "dic"))
+```
+
+```{r}
+ggplot(pde, aes(x = `Mes`, y = `Temperatura max (°C)`, group = 1)) +
+  geom_density2d() +
+  labs(title = "Temperaturas promedio en Punta del Este 1992-2012",
+       caption = "@G33kyCats") +
+  theme_light() +
+     theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+           plot.caption = element_text(face = "italic", size = 10),
+           axis.title.x = element_text(color="gray40", size=12, face="bold"),
+           axis.title.y = element_text(color="gray40", size=12, face="bold")) 
+
+# ggplot(pde, aes(as.numeric(x = `Mes`), y = `Temperatura max (°C)`)) +
+#   geom_density2d() 
+
+```
+
+
+```{r}

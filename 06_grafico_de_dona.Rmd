@@ -37,18 +37,24 @@ titanic <- titanic %>%
 
 palette <- c("#72ecee", "#45a4b8", "#06547a", "#3e8b7e")
 
-ggplot(titanic, aes(x = 2, y = prop, fill = clase)) +
+titanic_plot <- ggplot(titanic, aes(x = 2, y = prop, fill = clase)) +
   geom_bar(stat = "identity", color = "white") +
   coord_polar(theta = "y", start = 0) +
-  geom_text(aes(y = lab.ypos, label = prop), color = "white", fontface = "bold")+
+  geom_text(aes(y = lab.ypos, label = prop), color = "white", fontface = "bold") +
   scale_fill_manual(values = palette) +
   theme_void() +
   xlim(0.5, 2.5) + # genera el efecto dona
   labs(title = "Pasajeros y tripulantes del Titanic",
        caption = "@G33kyCats") +
-  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
-        plot.caption = element_text(face = "italic", size = 11))
+       theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
+             plot.caption = element_text(face = "italic", size = 11))
 
+titanic_plot
+```
+
+
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/06_grafico_de_dona.png", titanic_plot, width = 7, height = 6)
 ```
 
 

@@ -32,18 +32,26 @@ library(igraph)
 ```
 
 ```{r}
-
 lab = rbind(c("Maggie", "R-Ladies \n Montevideo"), c("Maggie", "GURU::mvd"), c("Maggie", "R-Ladies \n Buenos Aires"),c("Maggie", "R en \n Buenos Aires"), c("Maggie", "R-Ladies \n Gainesville"), c("Maggie", "R-Ladies Mid-Mo"), c("Maggie", "Greater Boston \n useR Group"), c("Maggie", "R-Ladies \n Riverside"), c("Maggie", "R-Ladies \n Santa Barbara"), c("Maggie", "R-Ladies Philly"), c("Maggie", "R-Ladies \n Washington D.C."), c("Maggie", "Salt Lake City \n R Users Group"), c("Maggie", "R-Ladies \n Cape Town"), c("Maggie", "R-Ladies Global"), c("R-Ladies \n Montevideo", "GURU::mvd"), c("R-Ladies \n Buenos Aires", "R en \n Buenos Aires"), c("R-Ladies Global", "R-Ladies \n Montevideo"), c("R-Ladies Global", "R-Ladies \n Buenos Aires"), c("R-Ladies Global", "R-Ladies \n Gainesville"), c("R-Ladies Global", "R-Ladies Mid-Mo"), c("R-Ladies Global", "R-Ladies \n Riverside"), c("R-Ladies Global", "R-Ladies \n Santa Barbara"), c("R-Ladies Global", "R-Ladies Philly"), c("R-Ladies Global", "R-Ladies \n Washington D.C."), c("R-Ladies Global", "R-Ladies \n Cape Town"))
 
-arcplot(lab, 
-        col.nodes="mediumorchid4", # color de los nodos
-        col.arcs = "plum", # color de los arcos
-        lwd.arcs = 1.5, # grosor de los arcos
-        col.labels = "lavenderblush4", # color texto ejes
-        cex.labels = 0.8, # tamaño texto ejes
-        las = 2) # posición texto ejes perpendicular
-
-title(main = "Comunidades de R-Ladies y usuarios de R en las que participo", 
-      font.main = 2, col.main = "thistle4",
+arco <- arcplot(lab,
+                col.nodes="mediumorchid4", # color de los nodos
+                col.arcs = "plum", # color de los arcos
+                lwd.arcs = 1.5, # grosor de los arcos
+                col.labels = "lavenderblush4", # color texto ejes
+                cex.labels = 0.8, # tamaño texto ejes
+                las = 2) # posición texto ejes perpendicular
+                
+title(main = "Comunidades de R-Ladies y usuarios de R en las que participo",
+      font.main = 2, col.main = "thistle4", 
+      adj = 0, # ubicación a la izquierda
+      sub = "@G33kyCats", col = "thistle",
       cex.sub = 0.75, font.sub = 3, col.sub = "thistle")
- ```
+
+```
+
+
+```{r}
+# ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/05_diagrama_de_arco.png", arco, width = 7, height = 6)
+```
+

@@ -11,15 +11,12 @@ Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://gith
 
 El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
 
-```{r message=FALSE}
-# Cargar los paquetes requeridos
-library(tidyverse)
-```
+
 ## _Desafío Día 8: Gráfico de contorno_
 
-Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table). Seguí el ejemplo de .
+Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table). Seguí el ejemplo de Elio Campitelli (@d_olivaw) presentado en el Meetup de @renbaires.
 
-```{r gráficos ridgeline message=FALSE}
+```{r gráficos ridgeline}
 library(tidyverse)
 library(readxl)
 ```
@@ -33,20 +30,24 @@ pde$Mes <- factor(pde$Mes,levels = c("enero", "febrero", "marzo", "abril", "mayo
 ```
 
 ```{r}
-ggplot(pde, aes(x = `Mes`, y = `Temperatura max (°C)`, group = 1)) +
+contorno <- ggplot(pde, aes(x = `Mes`, y = `Temperatura max (°C)`, group = 1)) +
   geom_density2d() +
   labs(title = "Temperaturas promedio en Punta del Este 1992-2012",
        caption = "@G33kyCats") +
   theme_light() +
-     theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
-           plot.caption = element_text(face = "italic", size = 10),
-           axis.title.x = element_text(color="gray40", size=12, face="bold"),
-           axis.title.y = element_text(color="gray40", size=12, face="bold")) 
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+        plot.caption = element_text(face = "italic", size = 10),
+        axis.title.x = element_text(color="gray40", size=12, face="bold"),
+        axis.title.y = element_text(color="gray40", size=12, face="bold")) 
 
-# ggplot(pde, aes(as.numeric(x = `Mes`), y = `Temperatura max (°C)`)) +
-#   geom_density2d() 
-
+contorno
 ```
 
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/08_grafico_de_contorno.png", contorno, width = 7, height = 6)
+```
 
 ```{r}
+# ggplot(pde, aes(as.numeric(x = `Mes`), y = `Temperatura max (°C)`)) +
+#   geom_density2d() 
+```

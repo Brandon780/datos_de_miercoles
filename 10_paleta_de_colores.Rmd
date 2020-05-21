@@ -1,0 +1,104 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "21/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+## _Desafío Día 10: Explorar paletas de colores_
+
+Para este desafío utilicé la base de datos de la WNBA proporcionada para la carrera de Analista de Datos en R de [Dataquest](https://www.dataquest.io/path/data-analyst-r/). Para más información sobre la WNBA [visitar](https://www.wnba.com/stats/player-stats/).
+
+Realicé un gráfico de barras que compara las frecuencias de las jugadoras en las distintas posiciones. 
+
+```{r gráficos paleta de colores}
+library(tidyverse)
+library(viridis)
+library(viridisLite)
+library(readxl)
+library(grid)
+library(gridExtra)
+library(ggthemes)
+```
+
+```{r}
+# Importar la base de datos
+wnba <- read.csv("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/wnba.csv")
+```
+
+```{r}
+plot <- ggplot(wnba, aes(x = MIN, y = PTS)) +
+  geom_point(aes(color = Pos, alpha = 0.8, size = 0.3)) +
+  theme_few() +
+  theme(legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        plot.title = element_text(face = "bold.italic", hjust = 0.5))
+
+plot
+
+```
+
+
+
+```{r}
+magma <- plot + 
+  scale_color_viridis(option = "A", discrete = TRUE) + 
+  ggtitle("magma")
+
+magma
+```
+  
+```{r}
+inferno <- plot + 
+  scale_color_viridis(option = "B", discrete = TRUE) + 
+  ggtitle("inferno")
+
+inferno
+```
+
+```{r}
+plasma <- plot + 
+  scale_color_viridis(option = "C", discrete = TRUE) + 
+  ggtitle("plasma")
+
+plasma
+```
+
+```{r}
+viridis <- plot + 
+  scale_color_viridis(option = "D", discrete = TRUE) + 
+  ggtitle("viridis")
+
+viridis
+```
+
+  
+
+```{r}
+viridis_grid <- grid.arrange(magma, inferno, plasma, viridis, ncol = 2,
+                             top = textGrob("Explorando la paleta Viridis",
+                                            y = 0.7,
+                                            gp = gpar(fontsize = 15, fontface = "bold", fontfamily = "sans")),
+                             bottom = textGrob("@G33kyCats",
+                                               x = 0.9, # 0 es a la izquierda
+                                               y = 0.5,
+                                               gp = gpar(fontsize = 11, fontface = "italic", fontfamily = "sans", col = "thistle4"))) 
+
+```
+
+
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/10_paleta_de_colores.png", viridis_grid, width = 7, height = 6)
+```
+

@@ -20,10 +20,11 @@ Para cada uno de los 142 países, El paquete proporciona información sobre la e
 
 Realicé el gráfico de áreas apiladas sobre la evolución del GdP per cápita de los Estados Partes del Mercosur.
 
-```{r gráfico de áreas apiladas message=FALSE}
+```{r gráfico de áreas apiladas}
 # Cargar los paquetes requeridos
 library(tidyverse)
 library(viridis)
+library(viridisLite)
 library(gapminder)
 ```
 
@@ -34,7 +35,7 @@ mercosur <- gapminder %>%
 mercosur$country <- factor(mercosur$country,levels = c("Argentina", "Brazil", "Paraguay", "Uruguay"),
                    labels = c("Argentina", "Brasil", "Paraguay", "Uruguay")) 
   
-ggplot(data = mercosur, aes(x = year, y = gdpPercap, fill = country)) +
+area <- ggplot(data = mercosur, aes(x = year, y = gdpPercap, fill = country)) +
   geom_area(alpha=0.6, size=.5, colour="white") +
   theme_minimal() +
   scale_fill_viridis(discrete = T) +
@@ -44,8 +45,11 @@ ggplot(data = mercosur, aes(x = year, y = gdpPercap, fill = country)) +
        title = "Evolución del GdP per cápita en los Estados Partes del Mercosur",
        caption = "@G33kyCats") 
 
-
+area
 ```
 
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/09_grafico_de_areas_apiladas.png", area, width = 7, height = 6)
+```
 
 

@@ -11,7 +11,7 @@ Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://gith
 
 El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
 
-```{r}
+```{r message=FALSE}
 # Cargar los paquetes requeridos
 library(tidyverse)
 ```
@@ -155,7 +155,7 @@ Esta es la primera vez que hago un diagrama de arco. Decidí realizarlo con los 
 
 Utilicé el paquete creado por [Gaston Sanchez](https://github.com/gastonstat/arcdiagram) y me basé en sus [especificaciones](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.707.6275&rep=rep1&type=pdf)
 
-```{r diagrama de arco}
+```{r diagrama de arco message=FALSE}
 library(tidyverse)
 ```
 
@@ -193,7 +193,7 @@ Titanic {datasets} y en el paquete [ggpubr](https://cran.r-project.org/web/packa
 
 Realicé las 2 versiones de la misma dataset, en primer lugar utilizando ggplot() + coord_polar () y luego con ggdonutchart().
 
-```{r gráfico de dona}
+```{r gráfico de dona message=FALSE}
 library(tidyverse)
 ```
 
@@ -243,7 +243,7 @@ ggplot(titanic, aes(x = 2, y = prop, fill = clase)) +
 
 Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table). Seguí el ejemplo de gráfico ridgeline de [Datanovia](https://www.datanovia.com/en/blog/elegant-visualization-of-density-distribution-in-r-using-ridgeline/).
 
-```{r gráficos ridgeline}
+```{r gráficos ridgeline message=FALSE}
 library(tidyverse)
 library(readxl)
 library(ggridges)
@@ -271,4 +271,42 @@ ggplot(pde, aes(x = `Temperatura max (°C)`, y = `Mes`, fill = ..x..)) +
       panel.spacing = unit(0.1, "lines"),
       strip.text.x = element_text(size = 8),
       plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
-      plot.caption = element_text(face = "italic", size = 11)) 
+      plot.caption = element_text(face = "italic", size = 11))
+```
+
+## _Desafío Día 09: Gráfico de áreas apiladas_
+
+Para este desafío utilicé datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.
+
+Para cada uno de los 142 países, El paquete proporciona información sobre la expectativa de vida, el PIB per cápita y la población, generados cada cinco años, de 1952 a 2007.
+
+
+Realicé el gráfico de áreas apiladas sobre la evolución del GdP per cápita de los Estados Partes del Mercosur.
+
+```{r gráfico de áreas apiladas message=FALSE}
+# Cargar los paquetes requeridos
+library(tidyverse)
+library(viridis)
+library(gapminder)
+```
+
+```{r}
+mercosur <- gapminder %>% 
+  filter(country == "Argentina" | country == "Brazil" | country == "Paraguay" | country == "Uruguay") 
+
+mercosur$country <- factor(mercosur$country,levels = c("Argentina", "Brazil", "Paraguay", "Uruguay"),
+                   labels = c("Argentina", "Brasil", "Paraguay", "Uruguay")) 
+  
+ggplot(data = mercosur, aes(x = year, y = gdpPercap, fill = country)) +
+  geom_area(alpha=0.6, size=.5, colour="white") +
+  theme_minimal() +
+  scale_fill_viridis(discrete = T) +
+  labs(x = NULL, 
+       y = NULL, 
+       fill = NULL, 
+       title = "Evolución del GdP per cápita en los Estados Partes del Mercosur",
+       caption = "@G33kyCats") 
+
+
+```
+```{r}

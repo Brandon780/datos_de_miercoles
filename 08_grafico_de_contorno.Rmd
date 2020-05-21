@@ -11,7 +11,7 @@ Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://gith
 
 El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
 
-```{r}
+```{r message=FALSE}
 # Cargar los paquetes requeridos
 library(tidyverse)
 ```
@@ -19,7 +19,7 @@ library(tidyverse)
 
 Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table). Seguí el ejemplo de .
 
-```{r gráficos ridgeline}
+```{r gráficos ridgeline message=FALSE}
 library(tidyverse)
 library(readxl)
 ```

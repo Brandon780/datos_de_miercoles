@@ -1,0 +1,51 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "20/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+## _Desafío Día 09: Gráfico de áreas apiladas_
+
+Para este desafío utilicé datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.
+
+Para cada uno de los 142 países, El paquete proporciona información sobre la expectativa de vida, el PIB per cápita y la población, generados cada cinco años, de 1952 a 2007.
+
+
+Realicé el gráfico de áreas apiladas sobre la evolución del GdP per cápita de los Estados Partes del Mercosur.
+
+```{r gráfico de áreas apiladas message=FALSE}
+# Cargar los paquetes requeridos
+library(tidyverse)
+library(viridis)
+library(gapminder)
+```
+
+```{r}
+mercosur <- gapminder %>% 
+  filter(country == "Argentina" | country == "Brazil" | country == "Paraguay" | country == "Uruguay") 
+
+mercosur$country <- factor(mercosur$country,levels = c("Argentina", "Brazil", "Paraguay", "Uruguay"),
+                   labels = c("Argentina", "Brasil", "Paraguay", "Uruguay")) 
+  
+ggplot(data = mercosur, aes(x = year, y = gdpPercap, fill = country)) +
+  geom_area(alpha=0.6, size=.5, colour="white") +
+  theme_minimal() +
+  scale_fill_viridis(discrete = T) +
+  labs(x = NULL, 
+       y = NULL, 
+       fill = NULL, 
+       title = "Evolución del GdP per cápita en los Estados Partes del Mercosur",
+       caption = "@G33kyCats") 
+
+
+```
+
+
+

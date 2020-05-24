@@ -1,7 +1,7 @@
 ---
 title: "30 días de gráficos con R"
 author: "Maggie"
-date: "12/5/2020"
+date: "19/5/2020"
 output: html_document
 ---
 
@@ -37,8 +37,8 @@ contorno <- ggplot(pde, aes(x = `Mes`, y = `Temperatura max (°C)`, group = 1)) 
   theme_light() +
   theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
         plot.caption = element_text(face = "italic", size = 10),
-        axis.title.x = element_text(color="gray40", size=12, face="bold"),
-        axis.title.y = element_text(color="gray40", size=12, face="bold")) 
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold")) 
 
 contorno
 ```

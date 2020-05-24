@@ -1,0 +1,57 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "12/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+## _Desafío Día 12: Gráfico de paleta (lollipop)_
+
+Para este desafío me basé en los datos de la [FIBA](https://www.fibalivestats.com/u/FUBB/1219087/) para la última final de la Liga Uruguaya de Basquetbol 2018-2019, entre Malvín y Aguada. 
+
+Realicé el gráfico de paleta con los puntos encestados por cada jugador, discriminados por equipo. 
+
+```{r lollipop}
+# Cargar los paquetes requeridos
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+# Importar la base de datos
+FIBA <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/FIBA.xlsx")
+
+```
+
+```{r}
+lollipop <- ggplot(data = FIBA) +  
+  geom_linerange(aes(x = Nombre, ymin = 0, ymax = Pts, colour = Equipo),
+                 position = position_dodge(width = 1)) +
+  geom_point(aes(x = Nombre, y = Pts, color = Equipo), size = 3,
+             position = position_dodge(width = 1)) +
+  coord_flip() +
+  scale_colour_manual(values = c("forestgreen", "navyblue")) +
+  theme_minimal() +
+  labs(title = "Puntos por jugador partido final Liga 2018-2019",
+       caption = "@G33kyCats") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold"), 
+        axis.text.x = element_text(color = "gray40", size = 8))
+
+lollipop
+```
+
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/12_lollipop.png", lollipop, width = 7, height = 6)
+```
+
+

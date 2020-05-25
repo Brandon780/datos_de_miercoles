@@ -583,7 +583,10 @@ temporal
 ```
 
 
+<<<<<<< HEAD
 ## _Desafío Día 14: Visualización de datos temporales_
 
 
+=======
+>>>>>>> 484d5c70d62e312fa79e169bace5ee764a6f56f3
 

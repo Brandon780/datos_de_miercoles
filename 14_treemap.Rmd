@@ -1,0 +1,79 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "25/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+
+## _Desafío Día 14: Gráficos de rectángulos/árbol (treemap)_
+
+Para este desafío utilicé datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.
+
+Para cada uno de los 142 países, El paquete proporciona información sobre la expectativa de vida, el PIB per cápita y la población, generados cada cinco años, de 1952 a 2007.
+
+Para hacer el gráfico de árbol, utilicé el paquete treemapify de David Wilkins, y me basé en su [ejemplo](https://cran.r-project.org/web/packages/treemapify/vignettes/introduction-to-treemapify.html) para realizar el mío.
+
+
+```{r gráfico de árbol}
+library(tidyverse)
+library(ggplotify)
+library(treemapify)
+library(gapminder)
+library(viridisLite)
+library(viridis)
+```
+
+```{r}
+data <- gapminder %>% 
+  filter(year=="2007") %>% 
+  select(-year) %>% 
+  arrange(desc(pop)) %>%
+  mutate(country = factor(country, country), 
+         Continente = continent) 
+  
+ data$Continente <- factor(data$Continente,levels = c("Africa", "Americas", "Asia", "Europe", "Oceania"),
+                    labels = c("África", "Américas", "Asia ", "Europa", "Oceanía"))
+```
+
+```{r}
+treemap_coordenadas <- treemapify(data = data,
+                      area = "pop",
+                      fill = "lifeExp",
+                      label = "country",
+                      group = "Continente")
+
+treemap_coordenadas
+```
+
+
+```{r}
+treemap_plot <- ggplot(data, aes(area = pop, fill = lifeExp, label = country, subgroup = Continente)) +
+  geom_treemap() +
+  geom_treemap_subgroup_border() +
+  geom_treemap_subgroup_text(place = "centre", grow = T, alpha = 0.5, colour =
+                             "black", fontface = "italic", min.size = 0) +
+  geom_treemap_text(colour = "white", place = "topleft", reflow = T) +
+  scale_fill_viridis(option = "C", direction = -1) +
+  # facet_wrap(~continent)
+  labs(title = "Expectativa de vida y cantidad de habitantes por país",
+       caption = "@G33kyCats",
+       fill = "Años") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 15),
+        plot.caption = element_text(color="gray40", face = "italic", size = 10))
+
+treemap_plot
+```
+
+
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/14_treemap.png", treemap_plot, width = 7, height = 6)
+```
+

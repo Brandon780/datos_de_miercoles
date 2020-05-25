@@ -549,7 +549,7 @@ lollipop
 
 ## _Desafío Día 13: Visualización de datos temporales_
 
-Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table). Seguí el ejemplo de gráfico ridgeline de [Datanovia](https://www.datanovia.com/en/blog/elegant-visualization-of-density-distribution-in-r-using-ridgeline/).
+Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table).
 
 ```{r gráficos ridgeline}
 library(tidyverse)
@@ -583,10 +583,61 @@ temporal
 ```
 
 
-<<<<<<< HEAD
-## _Desafío Día 14: Visualización de datos temporales_
+## _Desafío Día 14: Gráficos de rectángulos/árbol (treemap)_
+
+Para este desafío utilicé datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.
+
+Para cada uno de los 142 países, El paquete proporciona información sobre la expectativa de vida, el PIB per cápita y la población, generados cada cinco años, de 1952 a 2007.
+
+Para hacer el gráfico de árbol, utilicé el paquete treemapify de David Wilkins, y me basé en su [ejemplo](https://cran.r-project.org/web/packages/treemapify/vignettes/introduction-to-treemapify.html) para realizar el mío.
 
 
-=======
->>>>>>> 484d5c70d62e312fa79e169bace5ee764a6f56f3
+```{r gráfico de árbol}
+library(tidyverse)
+library(ggplotify)
+library(treemapify)
+library(gapminder)
+library(viridisLite)
+library(viridis)
+```
+
+```{r}
+data <- gapminder %>% 
+  filter(year=="2007") %>% 
+  select(-year) %>% 
+  arrange(desc(pop)) %>%
+  mutate(country = factor(country, country), 
+         Continente = continent) 
+  
+ data$Continente <- factor(data$Continente,levels = c("Africa", "Americas", "Asia", "Europe", "Oceania"),
+                    labels = c("África", "Américas", "Asia ", "Europa", "Oceanía"))
+```
+
+```{r}
+treemap_coordenadas <- treemapify(data = data,
+                      area = "pop",
+                      fill = "lifeExp",
+                      label = "country",
+                      group = "Continente")
+
+treemap_coordenadas
+```
+
+```{r}
+treemap_plot <- ggplot(data, aes(area = pop, fill = lifeExp, label = country, subgroup = Continente)) +
+  geom_treemap() +
+  geom_treemap_subgroup_border() +
+  geom_treemap_subgroup_text(place = "centre", grow = T, alpha = 0.5, colour =
+                             "black", fontface = "italic", min.size = 0) +
+  geom_treemap_text(colour = "white", place = "topleft", reflow = T) +
+  scale_fill_viridis(option = "C", direction = -1) +
+  # facet_wrap(~continent)
+  labs(title = "Expectativa de vida y cantidad de habitantes por país",
+       caption = "@G33kyCats",
+       fill = "Años") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 15),
+        plot.caption = element_text(color="gray40", face = "italic", size = 10))
+
+treemap_plot
+
 

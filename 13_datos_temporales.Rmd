@@ -14,7 +14,7 @@ El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera c
 
 ## _Desafío Día 13: Visualización de datos temporales_
 
-Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table). Seguí el ejemplo de gráfico ridgeline de [Datanovia](https://www.datanovia.com/en/blog/elegant-visualization-of-density-distribution-in-r-using-ridgeline/).
+Para este desafío uní en una misma base de datos, la información de las temperaturas promedio de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table).
 
 ```{r gráficos ridgeline}
 library(tidyverse)

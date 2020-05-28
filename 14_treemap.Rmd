@@ -12,7 +12,6 @@ Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://gith
 El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
 
 
-
 ## _Desafío Día 14: Gráficos de rectángulos/árbol (treemap)_
 
 Para este desafío utilicé datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.
@@ -62,7 +61,6 @@ treemap_plot <- ggplot(data, aes(area = pop, fill = lifeExp, label = country, su
                              "black", fontface = "italic", min.size = 0) +
   geom_treemap_text(colour = "white", place = "topleft", reflow = T) +
   scale_fill_viridis(option = "C", direction = -1) +
-  # facet_wrap(~continent)
   labs(title = "Expectativa de vida y cantidad de habitantes por país",
        caption = "@G33kyCats",
        fill = "Años") +

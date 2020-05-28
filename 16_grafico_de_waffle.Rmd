@@ -1,0 +1,51 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "27/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+## _Desafío Día 16: Gráficos de waffle_
+
+Para este desafío, usé los datos del ranking con los 20 Lenguajes de Programación más usados según  [TIOBE](https://blog.nubecolectiva.com/los-20-lenguajes-de-programacion-mas-populares-abril-2020/). Fue un desafío en sí poder pasar los valores a la función waffle(), ya que no funcionaba pasándole directamente el data.frame. Por suerte, pude ver cómo lo resolvío [@grupodabia](https://github.com/DabiaCenter/30-dias-graficos/blob/master/dia_16/dia-16_grafica_waffle.R) y emular el proceso.
+
+```{r}
+library(ggplot2)
+library(waffle)
+library(dplyr)
+```
+
+```{r}
+
+leng <- data.frame(
+  "lenguajes" = c("Java", "C", "Python", "C++", "C#", "Visual Basic", "JavaScript", "PHP", "SQL", "R"),
+  "porcentaje" = c(17, 17, 9, 7, 5, 5, 2, 2, 2, 2))
+
+leng <- leng %>% 
+  arrange(desc(porcentaje))
+
+lenguajes_fav <- leng$porcentaje
+names(lenguajes_fav) <- leng$lenguajes
+
+waffle_leng <- waffle(lenguajes_fav, rows = 7, 
+       title = "Lenguajes de programación más utilizados", 
+       color = c("#f8b195", "#f67280", "#c06c84", "#6c5b7b", "#355c7d", "#114b5f", "#028174", "#45ada8", "#9de0ad", "#e5fcc2"),
+       xlab = "@G33kyCats")
+
+waffle_leng
+```
+
+
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/16_waffle.png", waffle_leng, width = 7, height = 6)
+```
+
+
+

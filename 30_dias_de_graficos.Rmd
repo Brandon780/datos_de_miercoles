@@ -183,9 +183,11 @@ arcplot(lab,
         cex.labels = 0.8, # tamaño texto ejes
         las = 2) # posición texto ejes perpendicular
 
-title(main = "Comunidades de R-Ladies y usuarios de R en las que participo", 
+title(main = "Comunidades de R-Ladies y usuarios de R en las que participo",
+      sub = "@G33kyCats",
       font.main = 2, col.main = "thistle4",
       cex.sub = 0.75, font.sub = 3, col.sub = "thistle")
+
 ```
  
 ## _Desafío Día 6: gráficos de dona_
@@ -233,10 +235,10 @@ ggplot(titanic, aes(x = 2, y = prop, fill = clase)) +
 # install.packages("ggpubr")
 # library(ggpubr)
 
- ggdonutchart(titanic, "prop", 
-              fill = "clase", color = "white",
-              palette = c("#72ecee", "#45a4b8", "#06547a", "#3e8b7e"),
-              lab.pos = "in", lab.font = "white")
+ # ggdonutchart(titanic, "prop", 
+ #              fill = "clase", color = "white",
+ #              palette = c("#72ecee", "#45a4b8", "#06547a", "#3e8b7e"),
+ #              lab.pos = "in", lab.font = "white")
 
 ```
 
@@ -639,5 +641,38 @@ treemap_plot <- ggplot(data, aes(area = pop, fill = lifeExp, label = country, su
         plot.caption = element_text(color="gray40", face = "italic", size = 10))
 
 treemap_plot
+```
 
 
+
+
+## _Desafío Día 16: Gráficos de waffle_
+
+Para este desafío, usé los datos del ranking con los 20 Lenguajes de Programación más usados según  [TIOBE](https://blog.nubecolectiva.com/los-20-lenguajes-de-programacion-mas-populares-abril-2020/). Fue un desafío en sí poder pasar los valores a la función waffle(), ya que no funcionaba pasándole directamente el data.frame. Por suerte, pude ver cómo lo resolvío [@grupodabia](https://github.com/DabiaCenter/30-dias-graficos/blob/master/dia_16/dia-16_grafica_waffle.R) y emular el proceso.
+
+```{r}
+library(ggplot2)
+library(waffle)
+library(dplyr)
+```
+
+```{r}
+
+leng <- data.frame(
+  "lenguajes" = c("Java", "C", "Python", "C++", "C#", "Visual Basic", "JavaScript", "PHP", "SQL", "R"),
+  "porcentaje" = c(17, 17, 9, 7, 5, 5, 2, 2, 2, 2))
+
+leng <- leng %>% 
+  arrange(desc(porcentaje))
+
+lenguajes_fav <- leng$porcentaje
+names(lenguajes_fav) <- leng$lenguajes
+
+waffle_leng <- waffle(lenguajes_fav, rows = 7, 
+       title = "Lenguajes de programación más utilizados", 
+       color = c("#f8b195", "#f67280", "#c06c84", "#6c5b7b", "#355c7d", "#114b5f", "#028174", "#45ada8", "#9de0ad", "#e5fcc2"),
+       xlab = "@G33kyCats")
+
+waffle_leng
+
+```

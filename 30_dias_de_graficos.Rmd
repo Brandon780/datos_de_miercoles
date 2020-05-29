@@ -676,3 +676,72 @@ waffle_leng <- waffle(lenguajes_fav, rows = 7,
 waffle_leng
 
 ```
+
+
+
+
+
+## _Desafío Día 18: Visualización de datos espaciales_
+
+Para este desafío utilicé los datos de geoservicios del Biovalor categoria I para Uruguay, proporcionados por el Ministerio de Vivienda Ordenamiento Territorial y Medio Ambiente - [MVOTMA](https://www.dinama.gub.uy/geoservicios/).
+
+Y me basé en los ejemplos publicados por Francisco Urdinez y Andrés Cruz Labrín en [AnalizaR Datos Políticos](https://arcruz0.github.io/libroadp/index.html) y en el de Diana Alonso Aransay en [MappingGIS](https://mappinggis.com/2019/07/creacion-de-mapas-con-r-y-ggplot2/)
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(sf)
+library(viridisLite)
+library(viridis)
+```
+
+```{r}
+shp_uycat <-  st_read("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/uy/paisseccat/PaisSecCat.shp")
+shp_cat1 <- st_read("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/uy/biovalor_cat1/c416Polygon.shp")
+
+```
+
+Al consultar por la clase de los archivos “shp_uycat" y "shp_cat1” se puede observar que son tanto archivos de tipo “sf” como “data.frame”.
+
+```{r}
+class(shp_uycat)
+class(shp_cat1)
+```
+
+```{r}
+st_geometry(uycat)
+st_geometry(shp_cat1)
+```
+
+```{r}
+ggplot(data = shp_uycat) +
+  geom_sf(aes(fill = DEPTO)) +
+  scale_fill_viridis(name = "DEPTO", option = "D", discrete = TRUE) +
+  xlab("Longitud") + ylab("Latitud") +
+  labs(title = "Uruguay",
+       caption = "@G33kyCats") +
+  theme_light() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold")) 
+```
+
+```{r}
+biovalor1 <- ggplot(data = shp_cat1) +
+  geom_sf(aes(fill = sp_2010)) +
+  scale_fill_viridis(name = "Categoría I", option = "D") +
+  xlab("Longitud") + ylab("Latitud") +
+  labs(title = "Biovalor - Uruguay",
+       caption = "@G33kyCats") +
+  theme_light() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold")) 
+
+biovalor1
+```
+
+
+

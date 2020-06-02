@@ -16,7 +16,7 @@ El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera c
 
 Para este desafío, usé los datos del ranking con los 20 Lenguajes de Programación más usados según  [TIOBE](https://blog.nubecolectiva.com/los-20-lenguajes-de-programacion-mas-populares-abril-2020/). Fue un desafío en sí poder pasar los valores a la función waffle(), ya que no funcionaba pasándole directamente el data.frame. Por suerte, pude ver cómo lo resolvío [@grupodabia](https://github.com/DabiaCenter/30-dias-graficos/blob/master/dia_16/dia-16_grafica_waffle.R) y emular el proceso.
 
-```{r}
+```{r gráfico de waffle}
 library(ggplot2)
 library(waffle)
 library(dplyr)

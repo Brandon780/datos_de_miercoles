@@ -18,7 +18,7 @@ Para este desafío utilicé los datos de geoservicios del Biovalor categoria I p
 
 Y me basé en los ejemplos publicados por Francisco Urdinez y Andrés Cruz Labrín en [AnalizaR Datos Políticos](https://arcruz0.github.io/libroadp/index.html) y en el de Diana Alonso Aransay en [MappingGIS](https://mappinggis.com/2019/07/creacion-de-mapas-con-r-y-ggplot2/)
 
-```{r}
+```{r datos espaciales}
 library(dplyr)
 library(ggplot2)
 library(sf)

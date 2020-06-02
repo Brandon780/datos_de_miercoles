@@ -25,7 +25,7 @@ library(tidyverse)
 library(devtools)
 
 # install 'arcdiagram'
-install_github('gastonstat/arcdiagram')
+# install_github('gastonstat/arcdiagram')
 
 library(arcdiagram)
 library(igraph)

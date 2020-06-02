@@ -18,12 +18,12 @@ Para este desafío utilicé la base de datos de animé [Kaggle](https://www.kagg
 
 Utilicé el paquete [gghighlight](https://www.rdocumentation.org/packages/gghighlight/versions/0.1.0) de Hiroaki Yutani, para resaltar en primer lugar mi animé favorito: Naruto (y su secuela Naruto Shippuuden). Y en segundo lugar, los animés que fueron identificados como favoritos por más de 40000 votos. 
 
+
 ```{r gráfico con anotaciones}
 # Cargar los paquetes requeridos
 library(dplyr)
 library(ggplot2)
 library(gghighlight)
-
 ```
 
 

@@ -782,4 +782,134 @@ stream
 ```
 
 
+## _Desafío Día 21: Gráfico con anotaciones_
+
+Para este desafío utilicé la base de datos de animé [Kaggle](https://www.kaggle.com/canggih/anime-data-score-staff-synopsis-and-genre), la cual consta de 1563 observaciones.
+
+Utilicé el paquete [gghighlight](https://www.rdocumentation.org/packages/gghighlight/versions/0.1.0) de Hiroaki Yutani, para resaltar en primer lugar mi animé favorito: Naruto (y su secuela Naruto Shippuuden). Y en segundo lugar, los animés que fueron identificados como favoritos por más de 40000 votos. 
+
+
+```{r gráfico con anotaciones}
+# Cargar los paquetes requeridos
+library(dplyr)
+library(ggplot2)
+library(gghighlight)
+```
+
+
+```{r}
+# Importar la base de datos
+anime <- read.csv("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/dataanime.csv")
+
+anime <- anime %>% 
+  filter(Status == "Finished Airing", 
+         Type == "TV") %>% 
+  mutate(Naruto = if_else(Title == "Naruto" | Title == "Naruto: Shippuuden", 1, 0))
+                         
+```
+
+```{r}
+naruto <- ggplot(data = anime, aes(x = Favorites, y = Score, color = Title)) +
+  geom_point() + 
+  theme_minimal() +
+  geom_point(data = filter(anime, Title == "Naruto"), color = "orange", size = 3) +
+  geom_point(data = filter(anime, Title == "Naruto: Shippuuden"), color = "orange", size = 3) +
+  gghighlight(Naruto == 1) + 
+  scale_colour_manual(values = c("orange", "orange")) + 
+  labs(title = "Mis animés favoritos",
+       caption = "@G33kyCats",
+       x = "Cantidad de favoritos",
+       y = "Puntuación") +
+  theme(legend.position = "none",
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 11),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold")) 
+  
+naruto    
+
+```
+
+```{r}
+
+favs <- ggplot(data = anime, aes(x = Favorites, y = Score, color = Title)) +
+  geom_point() + 
+  theme_minimal() +
+  gghighlight(Favorites > 40000 ) + 
+  # scale_colour_manual(values = c("orange", "orange")) + 
+  labs(title = "Animés con más 40.000 favoritos",
+       caption = "@G33kyCats",
+       x = "Cantidad de favoritos",
+       y = "Puntuación") +
+  theme(legend.position = "none",
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 18),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 11),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold")) 
+  
+favs    
+```
+
+
+## _Desafío Día 22: Visualización de datos textuales_
+
+Para este desafío, me basé en la visualización de @bynans1 de R-Ladies Buenos Aires y le di un toque personal con el paquete word cloud de [Ian Fellows](http://blog.fellstat.com/?cat=11). 
+
+Utilicé las letras de algunas canciones de La Trampa (*Caída libre, El Poeta dice la verdad, De nosotros dos, Las Décimas*) para hacer la visualización de los datos textuales.
+
+```{r datos textuales}
+library(tidyverse)
+library(tidytext)
+library(readxl)
+library(wordcloud)
+library(RColorBrewer)
+```
+
+```{r}
+la_trampa <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/la_trampa.xlsx")
+```
+
+```{r}
+cancion_palabras <- la_trampa %>% 
+  select(text) %>%  
+  unnest_tokens(word,text)
+```
+
+```{r}
+cancion_palabras %>% 
+  count(word, sort = TRUE)
+```
+Generé mi propia base de datos de stopwords para filtrar las palabras frecuentes no deseadas:
+```{r}
+stopwords <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/stopwords.xlsx")
+
+```
+
+```{r}
+cancion_filtrada <- cancion_palabras %>%
+  anti_join(stopwords, by = c("word" = "stopwords"))
+```
+
+```{r}
+palabras_frecuencias <- cancion_filtrada %>% 
+  count(word, sort = TRUE)
+
+palabras_frecuencias
+```
+
+```{r}
+wordcloud(palabras_frecuencias$word, 
+          freq =  palabras_frecuencias$n,
+          min.freq = 2,
+          max.words = 49, 
+          colors = brewer.pal(5,"Set2"), 
+          random.order = FALSE, 
+          random.color = TRUE,
+          rot.per=.1,
+          fixed.asp=TRUE,
+          use.r.layout = FALSE)
+title("La Trampa", sub = "@G33kyCats",
+      cex.main = 2,   font.main= 4, 
+      cex.sub = 0.75, font.sub = 3, col.sub = "gray40")
+```
 

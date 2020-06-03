@@ -1,0 +1,90 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "02/06/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+## _Desafío Día 22: Visualización de datos textuales_
+
+Para este desafío, me basé en la visualización de @bynans1 de R-Ladies Buenos Aires y le di un toque personal con el paquete word cloud de [Ian Fellows](http://blog.fellstat.com/?cat=11). 
+
+Utilicé las letras de algunas canciones de La Trampa (*Caída libre, El Poeta dice la verdad, De nosotros dos, Las Décimas*) para hacer la visualización de los datos textuales.
+
+```{r datos textuales}
+library(tidyverse)
+library(tidytext)
+library(readxl)
+library(wordcloud)
+library(RColorBrewer)
+```
+
+```{r}
+la_trampa <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/la_trampa.xlsx")
+```
+
+```{r}
+cancion_palabras <- la_trampa %>% 
+  select(text) %>%  
+  unnest_tokens(word,text)
+```
+
+```{r}
+cancion_palabras %>% 
+  count(word, sort = TRUE)
+```
+Generé mi propia base de datos de stopwords para filtrar las palabras frecuentes no deseadas:
+```{r}
+stopwords <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/stopwords.xlsx")
+
+```
+
+```{r}
+cancion_filtrada <- cancion_palabras %>%
+  anti_join(stopwords, by = c("word" = "stopwords"))
+```
+
+```{r}
+palabras_frecuencias <- cancion_filtrada %>% 
+  count(word, sort = TRUE)
+
+palabras_frecuencias
+```
+
+```{r}
+wordcloud(palabras_frecuencias$word, 
+          freq =  palabras_frecuencias$n,
+          min.freq = 2,
+          max.words = 49, 
+          colors = brewer.pal(5,"Set2"), 
+          random.order = FALSE, 
+          random.color = TRUE,
+          rot.per=.1,
+          fixed.asp=TRUE,
+          use.r.layout = FALSE)
+title("La Trampa", sub = "@G33kyCats",
+      cex.main = 2,   font.main= 4, 
+      cex.sub = 0.75, font.sub = 3, col.sub = "gray40")
+```
+
+
+En contraste, el paquete wordcloud2 ofrece más opciones para la visualización (por ejemplo la forma) pero no se ve tan nítido.
+
+```{r}
+# library(wordcloud2)
+# 
+# wordcloud2(data = palabras_frecuencias,
+#            fontFamily = "serif",
+#            fontWeight = "bold",
+#            shape = "cardioid", 
+#            color = "random-light")
+```
+
+

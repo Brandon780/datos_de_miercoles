@@ -913,3 +913,79 @@ title("La Trampa", sub = "@G33kyCats",
       cex.sub = 0.75, font.sub = 3, col.sub = "gray40")
 ```
 
+
+
+
+
+## _Desafío Día 24: Coropletas_
+
+Para este desafío, actualicé la corolopleta que había utilizado para el projecto de la semana 14 de 2020 de [Tidy Tuesday](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-03-31/readme.md) y me basé en el ejemplo paso a paso de [r-graph-gallery](https://www.r-graph-gallery.com/hexbin-map.html) para poder hacerlo.
+
+Los datos corresponden a la producción anual de cerveza de Estados Unidos (fuente: Alcohol and Tobacco Tax and Trade Bureau - [TTB](https://www.ttb.gov/beer/statistics)).
+
+Utilicé la producción de cerveza en botellas y latas del año 2019, con los valores mapeados por estado. Elegí representar los estados en formato hexagonal porque me parecía la forma más divertida para asociarlo con los Hex de R.   
+
+```{r coropletas}
+library(tidyverse)
+library(geojsonio)
+library(rgdal)
+library(broom) #tidy spdf
+library(rgeos) #permite calcular los centroides de cada hexágono para agregar la etiqueta
+library(maps)
+library(mapproj)
+library(viridis)
+library(viridisLite)
+library(scales) #permite sobreescribir la notación científica de la escala por comas
+```
+
+```{r}
+#Importar los datos
+beer_states <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-31/beer_states.csv')
+```
+Creando el hexágono  
+```{r}
+# Es necesario descargar los límites estatales hexagonales en formato geojson de: https://team.carto.com/u/andrew/tables/andrew.us_states_hexgrid/public/map
+
+# Cargar los límites en como "Spatial Polygons Data Frame"
+spdf <- geojson_read("C:/Users/Maggie/OneDrive/aR/TidyTuesday/DATA/us_states_hexgrid.geojson",  what = "sp")
+
+# Reformatear los datos 
+spdf@data = spdf@data %>%
+  mutate(google_name = gsub(" \\(United States\\)", "", google_name))
+
+# Fortificar en un formato de data frame format para que puedan ser mostrados con ggplot2
+spdf_fortified <- tidy(spdf, region = "iso3166_2")
+
+# Calcular los centroides de cada hexágono para agregar la etiqueta 
+centros <- cbind.data.frame(data.frame(gCentroid(spdf, byid=TRUE), id=spdf@data$iso3166_2))
+
+```
+Agregando los nombres de los Estados
+```{r}
+# Unión de la información geoespacial y numérica
+datos <- spdf_fortified %>%
+  left_join(beer_states,  by=c("id" = "state")) %>%
+  filter(year == "2019", type == "Bottles and Cans") 
+
+```
+Personalizando la coropleta hex
+
+```{r}
+coropleta <- ggplot() +
+  geom_polygon(data = datos, aes(x = long, y = lat, fill =  barrels, group = group), size = 0, alpha = 0.95, color = "black") +
+  geom_text(data = centros, aes(x = x, y = y, label = id), color = "brown", fontface = "bold")+
+  labs(title = "Producción de cerveza por Estado", 
+       subtitle = "Botellas y latas de 2019",
+       caption = "@G33kyCats")+
+  theme_void() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 20),
+        plot.subtitle = element_text(hjust = 0.5, size = 16),
+        plot.caption = element_text(color = "gray40",face = "italic", size = 11))+
+  scale_fill_viridis_c(name = "Barriles", begin = 0.53, end = 1, option = "inferno", direction = 1, trans = "log", na.value = NA, labels = comma) +
+  coord_map()
+
+coropleta
+```
+
+
+```{r}

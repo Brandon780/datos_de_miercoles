@@ -1,0 +1,62 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "06/06/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+## _Desafío Día 26: Diagrama de marimekko_
+
+
+```{r diagrama de marimekko}
+library(ggplot2)
+library(ggmosaic)
+library(dplyr)
+
+```
+
+```{r}
+feliz <- happy
+  
+# Renombrando los niveles y etiquetas de las variables
+happy$happy <- factor(happy$happy, levels = c("not too happy", "pretty happy", "very happy"),
+                      labels = c("poco feliz", "algo feliz", "muy feliz"),
+                      ordered = TRUE)
+
+happy$health <- factor(happy$health, levels = c("poor", "fair", "good", "excellent"),
+                      labels = c("pobre", "malo", "bueno", "excelente"),
+                      ordered = TRUE)
+
+
+```
+
+
+```{r}
+ marimekko <- ggplot(data = feliz) +
+  geom_mosaic(aes(x = product(happy, health), fill = happy), na.rm = TRUE) +
+  labs(title='Relación entre niveles de felicidad y de salud',
+       caption = "@G33kyCats",
+       x = "Niveles de salud (de bajo a excelente)",
+       y = "Niveles de felicidad") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.text = element_text(color = "gray40", size = 8)) +
+  scale_fill_viridis(name = "Felicidad", discrete = TRUE, option = "inferno", direction = -1, begin = 0.15) 
+
+marimekko
+```
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/26_diagrama_de_marimekko.png", marimekko, width = 7, height = 6)
+
+```
+

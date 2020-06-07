@@ -1,0 +1,55 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "07/06/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+## _Desafío Día 27: Gráficos animados_
+
+Para este desafío utilicé los resultados de las finales de la Liga Uruguaya de Básquetbol, temporada 2018-2019 con motivos de celebrarse un año desde el último campeonato ganado por el Club Atlético Aguada.
+
+```{r gráfico animado}
+library(dplyr)
+library(ggplot2)
+library(gganimate)
+library(readxl)
+library(gifski)
+```
+
+```{r}
+lub_18_19 <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/lub2018.xlsx")
+
+```
+
+```{r}
+campeon <- ggplot(data = lub_18_19, aes(x = Final, y = Puntos, fill = Equipo)) +
+  geom_col(position = "dodge") +
+  transition_reveal(Final) +
+  theme_light() +
+  scale_fill_manual(values = c("#058405", "#0808c9")) +
+  labs(title = "Finales LUB 2018 - 2019",
+       caption = "@G33kyCats") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold"))
+
+```
+
+```{r}
+animacion <- animate(campeon, renderer = gifski_renderer()) 
+animacion
+```
+```{r}
+anim_save("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/27_grafico_animado.gif", animation = animacion)
+
+```
+

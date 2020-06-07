@@ -14,11 +14,11 @@ El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera c
 
 ## _Desafío Día 19: Gráficos de flujo (stream graph)_
 
-Para este desafío utilicé los datos del catálogo abierto de la Oficina de Presupuesto y Planeamiento - [OPP](https://catalogodatos.gub.uy/dataset/opp-ingresos-y-egresos-de-los-gobiernos-departamentales-y-egresos-de-los-gobiernos-municipales) sobre sistematiza de los ingresos de los Gobiernos Departamentales desde 1989 y de los egresos de los Gobiernos Municipales desde 2016, a partir de las Rendiciones de cuentas enviadas al Tribunal de Cuentas. Restringí los datos a los últimos 10 años (entre 1999 y 2009), para que fueran los más recientes.
+Para este desafío utilicé los datos del catálogo abierto de la Oficina de Presupuesto y Planeamiento - [OPP](https://catalogodatos.gub.uy/dataset/opp-ingresos-y-egresos-de-los-gobiernos-departamentales-y-egresos-de-los-gobiernos-municipales) sobre los ingresos de los Gobiernos Departamentales desde 1989 y de los egresos de los Gobiernos Municipales desde 2016, a partir de las Rendiciones de cuentas enviadas al Tribunal de Cuentas. Restringí los datos a los últimos 10 años (entre 1999 y 2009), para que fueran los más recientes.
 
 Usé el paquete [streamgraph](https://github.com/hrbrmstr/streamgraph) y seguí el ejemplo de [r-graph-gallery](https://www.r-graph-gallery.com/154-basic-interactive-streamgraph-2.html) para hacerlo.
 
-```{r}
+```{r gráfico de flujo}
 library(dplyr)
 library(streamgraph)
 library(ggplot2)

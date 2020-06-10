@@ -1,0 +1,60 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "10/07/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+## _Desafío Día 30: Diagrama de área polar o de Florence Nightingale_
+
+Para terminar los 30 días de desafíos, exporté el listado de capítulos de R-Ladies por el mundo del sitio web de [Meetup R-Ladies](https://www.meetup.com/es-ES/pro/rladies), lo agrupé por continentes (ya que hacerlo por países era visualmente complejo por la cantidad). 
+
+```{r diagrama de área polar}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+library(viridisLite)
+library(viridis)
+```
+
+```{r}
+rladies <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/RLadies.xlsx")
+```
+
+```{r}
+rladies_country <-rladies %>%
+  group_by(Continente, `País`) %>%
+  summarize(n = n()) %>% 
+  arrange(n)
+```
+
+```{r}
+polar <- ggplot(data = rladies_country, aes(x = Continente, y = n, fill = Continente)) +
+  geom_bar(stat = "identity") +
+  coord_polar() +
+  scale_fill_viridis(discrete = TRUE, option = "magma", begin = 0.2, end = 0.9 ) +
+  labs(title = "R-Ladies Chapters in the World",
+       caption = "@G33kyCats") +
+  theme_light() +
+  theme(axis.title = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.text = element_blank(), 
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 11)) 
+
+polar   
+```
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/30_diagrama_de_area_polar.png", polar, width = 7, height = 6)
+
+```
+
+
+

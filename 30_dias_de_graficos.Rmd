@@ -746,7 +746,6 @@ biovalor1
 ```
 
 
-
 ## _Desafío Día 19: Gráficos de flujo (stream graph)_
 
 Para este desafío utilicé los datos del catálogo abierto de la Oficina de Presupuesto y Planeamiento - [OPP](https://catalogodatos.gub.uy/dataset/opp-ingresos-y-egresos-de-los-gobiernos-departamentales-y-egresos-de-los-gobiernos-municipales) sobre sistematiza de los ingresos de los Gobiernos Departamentales desde 1989 y de los egresos de los Gobiernos Municipales desde 2016, a partir de las Rendiciones de cuentas enviadas al Tribunal de Cuentas. Restringí los datos a los últimos 10 años (entre 1999 y 2009), para que fueran los más recientes.
@@ -1111,5 +1110,47 @@ animacion <- animate(campeon, renderer = gifski_renderer())
 animacion
 ```
 
+
+
+
+## _Desafío Día 30: Diagrama de área polar o de Florence Nightingale_
+
+Para terminar los 30 días de desafíos, exporté el listado de capítulos de R-Ladies por el mundo del sitio web de [Meetup R-Ladies](https://www.meetup.com/es-ES/pro/rladies), lo agrupé por continentes (ya que hacerlo por países era visualmente complejo por la cantidad). 
+
+```{r diagrama de área polar}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+library(viridisLite)
+library(viridis)
+```
+
+```{r}
+rladies <- read_excel("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/RLadies.xlsx")
+```
+
+```{r}
+rladies_country <-rladies %>%
+  group_by(Continente, `País`) %>%
+  summarize(n = n()) %>% 
+  arrange(n)
+```
+
+```{r}
+polar <- ggplot(data = rladies_country, aes(x = Continente, y = n, fill = Continente)) +
+  geom_bar(stat = "identity") +
+  coord_polar() +
+  scale_fill_viridis(discrete = TRUE, option = "magma", begin = 0.2, end = 0.9 ) +
+  labs(title = "R-Ladies Chapters in the World",
+       caption = "@G33kyCats") +
+  theme_light() +
+  theme(axis.title = element_blank(), 
+        axis.ticks = element_blank(),
+        axis.text = element_blank(), 
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 16),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 11)) 
+
+polar
+```
 
 

@@ -20,7 +20,9 @@ Realicé un gráfico de barras que compara las frecuencias de las jugadoras en l
 
 ```{r gráfico de barras o columnas}
 # Cargar los paquetes requeridos
-library(tidyverse)
+library(stringr)
+library(dplyr)
+library(ggplot2)
 ```
 
 ```{r}
@@ -29,8 +31,10 @@ wnba <- read.csv("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/wnba.csv")
 
 # Renombrando los niveles y etiquetas de las variables
 wnba$Pos <- factor(wnba$Pos,levels = c("G", "F", "C", "G/F", "F/C"),
-                   labels = c("Guard", "Forward", "Center", "Guard/Forward", "Forward/Center")) 
+                   labels = c("Guard", "Forward", "Center", "Guard/Forward", "Forward/Center"))
+```
 
+```{r}
 ggplot(data = wnba,
        aes(x = Pos, fill = Pos)) +
   geom_bar() + 
@@ -43,23 +47,34 @@ ggplot(data = wnba,
 pos_prop <- wnba %>% 
   group_by(Pos) %>% 
   summarize(Prop = n() / nrow(wnba))
+```
 
-ggplot(data = pos_prop, 
+```{r}
+barras <- ggplot(data = pos_prop, 
               aes(x = "", y = Prop, fill = Pos)) + 
   geom_bar(stat = "identity", width = 0.25) +
   coord_flip() +
   theme_classic() +
   geom_text(aes(label = str_c(round(Prop * 100), "%")), 
             position = position_stack(vjust = 0.5)) + 
-  theme(axis.line = element_blank(),
-          axis.text = element_blank(),
-          axis.ticks = element_blank()) +
   labs(x = NULL, 
        y = NULL, 
        fill = NULL, 
-       title = "Distribución de jugadoras según su posición") 
-   
+       title = "Distribución de jugadoras según su posición",
+       caption = "@G33kyCats") +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold"))
+
+barras
 ```
+
+
+
 ## _Desafío Día 2: Gráfico de líneas_
 
 Para este desafío utilicé datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.

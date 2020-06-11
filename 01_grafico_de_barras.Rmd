@@ -1,0 +1,79 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "12/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+
+## _Desafío Día 1: Gráfico de barras o columnas_
+
+Para este desafío utilicé la base de datos de la WNBA proporcionada para la carrera de Analista de Datos en R de [Dataquest](https://www.dataquest.io/path/data-analyst-r/). Para más información sobre la WNBA [visitar](https://www.wnba.com/stats/player-stats/).
+
+Realicé un gráfico de barras que compara las frecuencias de las jugadoras en las distintas posiciones. 
+
+```{r gráfico de barras o columnas}
+# Cargar los paquetes requeridos
+library(stringr)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r}
+# Importar la base de datos
+wnba <- read.csv("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/data/wnba.csv")
+
+# Renombrando los niveles y etiquetas de las variables
+wnba$Pos <- factor(wnba$Pos,levels = c("G", "F", "C", "G/F", "F/C"),
+                   labels = c("Guard", "Forward", "Center", "Guard/Forward", "Forward/Center"))
+```
+
+```{r}
+ggplot(data = wnba,
+       aes(x = Pos, fill = Pos)) +
+  geom_bar() + 
+  coord_flip() + 
+  theme_classic() +
+  theme(legend.position = "none") +
+  labs(x=NULL, y=NULL, fill=NULL,
+         title="Posiciones de las jugadoras") 
+  
+pos_prop <- wnba %>% 
+  group_by(Pos) %>% 
+  summarize(Prop = n() / nrow(wnba))
+```
+
+```{r}
+barras <- ggplot(data = pos_prop, 
+              aes(x = "", y = Prop, fill = Pos)) + 
+  geom_bar(stat = "identity", width = 0.25) +
+  coord_flip() +
+  theme_classic() +
+  geom_text(aes(label = str_c(round(Prop * 100), "%")), 
+            position = position_stack(vjust = 0.5)) + 
+  labs(x = NULL, 
+       y = NULL, 
+       fill = NULL, 
+       title = "Distribución de jugadoras según su posición",
+       caption = "@G33kyCats") +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        plot.title = element_text(face = "bold", hjust = 0.5, size = 17),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold"))
+
+barras
+```
+
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/01_grafico_de_barras.png", barras, width = 7, height = 6)
+```
+

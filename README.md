@@ -7,4 +7,4 @@ Proyectos y desafíos propuestos por la comunidad de R4DS en español
 
 ### Día 1: Gráfico de barras o columnas
 
-![Gráfico](C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/01_grafico_de_barras.png)
+![Gráfico](https://github.com/maggiesuero/datos_de_miercoles/blob/master/output/01_grafico_de_barras.png)

@@ -1010,6 +1010,8 @@ coropleta <- ggplot() +
 coropleta
 ```
 
+
+
 ## _Desafío Día 25: Gráfico de violín_
 
 Para este desafío volví a utilizar la recopilación de la información de la estación metereológica de Punta del Este - Maldonado entre los años 1992-2012 proporcionada por [Climate-data](https://es.climate-data.org/america-del-sur/uruguay/maldonado/maldonado-3742/#climate-table), pero esta vez en lugar de utilizar las temperaturas promedio en esos años, usé las precipitaciones promedio.

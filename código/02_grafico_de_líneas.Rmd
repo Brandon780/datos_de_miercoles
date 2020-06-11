@@ -1,0 +1,57 @@
+---
+title: "30 días de gráficos con R"
+author: "Maggie"
+date: "12/5/2020"
+output: html_document
+---
+
+# _30 días de gráficos con R_
+
+Desafío de la comunidad hispanoablante de R: [#30díasdegráficos](https://github.com/cienciadedatos/datos-de-miercoles/blob/master/30-dias-de-graficos-2020.md), una iniciativa para compartir y aprender sobre visualización de datos usando R.
+
+El 12 de mayo se conmemora el nacimiento de Florence Nightingale, la enfermera creadora del diagrama de área polar y referente femenina de la visualización de datos.
+
+## _Desafío Día 2: Gráfico de líneas_
+
+Para este desafío utilicé datos de [Gapminder](https://www.gapminder.org/data/), por medio del paquete creado por Jennifer Bryan.
+
+Para cada uno de los 142 países, El paquete proporciona información sobre la expectativa de vida, el PIB per cápita y la población, generados cada cinco años, de 1952 a 2007.
+
+
+Realicé el gráfico de líneas sobre la evolución de la expectativa de vida de los Estados Partes del Mercosur.
+
+```{r gráfico de líneas}
+library(ggplot2)
+library(gapminder) # Importar la base de datos Gapminder
+```
+
+```{r}
+mercosur <- gapminder %>% 
+  filter(country == "Argentina" | country == "Brazil" | country == "Paraguay" | country == "Uruguay") 
+
+mercosur$country <- factor(mercosur$country,levels = c("Argentina", "Brazil", "Paraguay", "Uruguay"),
+                   labels = c("Argentina", "Brasil", "Paraguay", "Uruguay"))
+```
+
+```{r}
+lineas <- ggplot(data = mercosur, aes(x = year, y = lifeExp, color = country)) +
+  geom_line() + 
+  geom_point() +
+  theme_minimal() +
+  labs(x = NULL, 
+       y = NULL, 
+       color = "Países", 
+       title = "Evolución de la expectativa de vida en los Estados Partes del Mercosur",
+       caption = "@G33kyCats") +
+  theme(plot.title = element_text(face = "bold"),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold")) 
+
+lineas
+```
+
+```{r}
+ggsave("C:/Users/Maggie/OneDrive/aR/datos_de_miercoles/output/02_grafico_de_líneas.png", lineas, width = 7, height = 6)
+```
+

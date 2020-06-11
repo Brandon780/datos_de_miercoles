@@ -85,8 +85,8 @@ Para cada uno de los 142 países, El paquete proporciona información sobre la e
 Realicé el gráfico de líneas sobre la evolución de la expectativa de vida de los Estados Partes del Mercosur.
 
 ```{r gráfico de líneas}
-# Importar la base de datos Gapminder
-library(gapminder)
+library(ggplot2)
+library(gapminder) # Importar la base de datos Gapminder
 ```
 
 ```{r}
@@ -94,16 +94,25 @@ mercosur <- gapminder %>%
   filter(country == "Argentina" | country == "Brazil" | country == "Paraguay" | country == "Uruguay") 
 
 mercosur$country <- factor(mercosur$country,levels = c("Argentina", "Brazil", "Paraguay", "Uruguay"),
-                   labels = c("Argentina", "Brasil", "Paraguay", "Uruguay")) 
-  
-ggplot(data = mercosur, aes(x = year, y = lifeExp, color = country)) +
+                   labels = c("Argentina", "Brasil", "Paraguay", "Uruguay"))
+```
+
+```{r}
+lineas <- ggplot(data = mercosur, aes(x = year, y = lifeExp, color = country)) +
   geom_line() + 
   geom_point() +
   theme_minimal() +
   labs(x = NULL, 
        y = NULL, 
-       fill = NULL, 
-       title = "Evolución de la expectativa de vida en los Estados Partes del Mercosur") 
+       color = "Países", 
+       title = "Evolución de la expectativa de vida en los Estados Partes del Mercosur",
+       caption = "@G33kyCats") +
+  theme(plot.title = element_text(face = "bold"),
+        plot.caption = element_text(color = "gray40", face = "italic", size = 10),
+        axis.title.x = element_text(color = "gray40", size = 12, face = "bold"),
+        axis.title.y = element_text(color = "gray40", size = 12, face = "bold")) 
+
+lineas
 ```
 
 ## _Desafío Día 3: Gráfico de puntos o burbujas_
